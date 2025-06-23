@@ -61,6 +61,22 @@
     .book-card {
       margin-top: 1.5rem;
     }
+
+/* button */
+  .nav-button {
+    background-color: #92A8D1;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .nav-button:hover {
+    background-color: #7a8eb8;
+  }
   </style>
 </head>
 <body>
@@ -78,7 +94,7 @@
     <h2>📖 Single Book Display</h2>
     <div id="single-book" class="book-card"></div>
   </main>
-  <p><a href="multiple-books.html">Multiple Books</a></p>
+
   <script>
     $.getJSON("json/google-books-book.json", function(data) {
       const bookHTML = `
@@ -90,6 +106,13 @@
       $('#single-book').html(bookHTML);
     });
   </script>
+
+  <p style="text-align: center;">
+  <a href="multiple-books.html">
+    <button class="nav-button">Go to Multiple Books Page</button>
+  </a>
+</p>
+
 </body>
 </html>
 
