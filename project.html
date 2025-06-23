@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
-<body>
-<title>JSON Book Display</title>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <meta charset="UTF-8">
+  <title>JSON Book Display</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 </head>
-<!-- Navbar (sit on top) -->
+<body>
+
+<!-- Navbar -->
 <nav>
   <h2>Adv Web & Mobile</h2>
   <ul>
@@ -15,48 +17,53 @@
     <li><a href="quiz.html">Quiz</a></li>
   </ul>
 </nav>
+
+<!-- Main Content -->
 <main class="container">
-    <h1>Milestone 1: JSON Book Display</h1>
+  <h1>Milestone 1: JSON Book Display</h1>
 
-    <section>
-      <h2>📖 Single Book</h2>
-      <div id="single-book" class="book-display"></div>
-    </section>
+  <section>
+    <h2>📖 Single Book</h2>
+    <div id="single-book" class="book-display"></div>
+  </section>
 
-    <section>
-      <h2>📚 Multiple Books</h2>
-      <div id="multiple-books" class="book-list"></div>
-    </section>
-  </main>
+  <section>
+    <h2>📚 Multiple Books</h2>
+    <div id="multiple-books" class="book-list"></div>
+  </section>
+</main>
 
-  <script>
-    // Load and display one book
-    $.getJSON("json/google-books-book.json", function(data) {
-      const bookHTML = `
+<!-- jQuery Script -->
+<script>
+  // Load and display one book
+  $.getJSON("json/google-books-book.json", function(data) {
+    const bookHTML = `
+      <div class="book-card">
+        <h3>${data.volumeInfo.title}</h3>
+        <p><strong>Author(s):</strong> ${data.volumeInfo.authors?.join(', ')}</p>
+        <p><strong>Description:</strong> ${data.volumeInfo.description}</p>
+        <img src="${data.volumeInfo.imageLinks?.thumbnail}" alt="Book Cover">
+      </div>
+    `;
+    $('#single-book').html(bookHTML);
+  });
+
+  // Load and display multiple books
+  $.getJSON("json/google-books-search.json", function(data) {
+    let output = "";
+    data.items.forEach(book => {
+      output += `
         <div class="book-card">
-          <h3>${data.volumeInfo.title}</h3>
-          <p><strong>Author(s):</strong> ${data.volumeInfo.authors?.join(', ')}</p>
-          <p><strong>Description:</strong> ${data.volumeInfo.description}</p>
-          <img src="${data.volumeInfo.imageLinks?.thumbnail}" alt="Book Cover">
+          <h4>${book.volumeInfo.title}</h4>
+          <p><strong>Author(s):</strong> ${book.volumeInfo.authors?.join(', ')}</p>
+          <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="Thumbnail">
         </div>
       `;
-      $('#single-book').html(bookHTML);
     });
+    $('#multiple-books').html(output);
+  });
+</script>
 
-    // Load and display multiple books
-    $.getJSON("json/google-books-search.json", function(data) {
-      let output = "";
-      data.items.forEach(book => {
-        output += `
-          <div class="book-card">
-            <h4>${book.volumeInfo.title}</h4>
-            <p><strong>Author(s):</strong> ${book.volumeInfo.authors?.join(', ')}</p>
-            <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="Thumbnail">
-          </div>
-        `;
-      });
-      $('#multiple-books').html(output);
-    });
-  </script>
 </body>
 </html>
+
