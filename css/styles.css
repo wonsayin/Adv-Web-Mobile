@@ -56,6 +56,25 @@ h1 {
   margin-top: 2rem;
 }
 
+.featured-item {
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+  text-align: center; /* Center text */
+  margin-right: 0; /* Removed since grid handles spacing */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Hide overflowing content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  transition: box-shadow 0.3s ease; /* Smooth transition for shadow */
+}
+
+/* Adjust hover effects */
+.featured-item:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+  transform: scale(1.02); /* Slight scale up on hover */
+}
+
 /* for milstone 1 book display */
 .book-display, .book-list {
   display: flex;
