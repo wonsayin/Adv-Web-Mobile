@@ -7,18 +7,12 @@
 
 body {
   font-family: Arial, Tahoma, sans-serif;
-  background-color: #f8f8f8;
+  background-color: #f9f9f9;
   color: #333;
   line-height: 1.6;
 }
 
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 2rem;
-}
-
-/* Navbar Styling */
+/* Navbar */
 nav {
   display: flex;
   justify-content: space-between;
@@ -30,21 +24,20 @@ nav {
 }
 
 nav h2 {
-  margin: 0;
   font-size: 1.5rem;
 }
 
 nav ul {
-  display: flex;
   list-style: none;
+  display: flex;
 }
 
 nav li {
-  margin-left: 1rem;
+  margin-left: 1.5rem;
 }
 
 nav a {
-  color: inherit;
+  color: white;
   text-decoration: none;
   font-weight: bold;
 }
@@ -53,58 +46,63 @@ nav a:hover {
   color: #e91e63;
 }
 
-/* Headings */
-h1 {
+/* Hero Section */
+.hero {
+  background-color: #e91e63;
+  color: white;
   text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  padding: 3rem 1rem;
 }
 
-h2, h3 {
-  margin-bottom: 1rem;
-  color: #222;
-}
-
-/* Media Sections */
-.media-section {
-  margin-top: 3rem;
-}
-
-.media-item {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  flex-wrap: wrap;
-}
-
-.media-item img {
-  max-width: 200px;
-  border-radius: 6px;
-}
-
-.media-details {
-  flex: 1;
-  min-width: 250px;
-}
-
-.media-details h4 {
+.hero h1 {
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
-.media-details p {
-  margin-bottom: 0.75rem;
+.hero p {
+  font-size: 1.2rem;
 }
 
-/* Rating Styling */
-.media-details span {
-  display: inline-block;
-  margin-right: 1rem;
-  font-size: 0.9rem;
+/* Main Content */
+main.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
+
+main h2, main h3 {
+  margin-top: 1.5rem;
+  color: #333;
+}
+
+main p, main a, main ul {
+  font-size: 1rem;
+  margin: 0.75rem 0;
+}
+
+main ul {
+  list-style: none;
+  padding: 0;
+}
+
+main li {
+  margin: 0.5rem 0;
+}
+
+main a {
+  color: #e91e63;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+main a:hover {
+  text-decoration: underline;
+}
+
 
 /* for milstone 1 book display */
 .book-display, .book-list {
