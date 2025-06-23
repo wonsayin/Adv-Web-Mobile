@@ -103,11 +103,6 @@ main a:hover {
   text-decoration: underline;
 }
 
-body {
-  background-color: lightblue;
-}
-
-
 
 /* for milstone 1 book display */
 .book-display, .book-list {
