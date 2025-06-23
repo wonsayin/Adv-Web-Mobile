@@ -25,6 +25,7 @@
   <section>
     <h2>📖 Single Book</h2>
     <div id="single-book" class="book-display"></div>
+    <p><a href="multiple-books.html">Multiple Books</a></p>
   </section>
 
   <section>
@@ -47,8 +48,6 @@
     `;
     $('#single-book').html(bookHTML);
   });
-
-   <p><a href="multiple-books.html">Multiple Books</a></p>
      
   // Load and display multiple books
   $.getJSON("json/google-books-search.json", function(data) {
