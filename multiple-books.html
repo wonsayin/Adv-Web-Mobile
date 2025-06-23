@@ -110,7 +110,6 @@
             <p><strong>Author(s):</strong> ${book.volumeInfo.authors?.join(', ')}</p>
             <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="Thumbnail">
           </div>
-          <p><a href="single-books.html">Back</a></p>
         `;
       });
       $('#multiple-books').html(output);
@@ -118,8 +117,8 @@
   </script>
 
    <p style="text-align: center;">
-  <a href="multiple-books.html">
-    <button class="nav-button">Go to Multiple Books Page</button>
+  <a href="single-books.html">
+    <button class="nav-button">Back</button>
   </a>
 </p>
   
