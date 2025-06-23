@@ -43,10 +43,7 @@
         <p><strong>Author(s):</strong> ${data.volumeInfo.authors?.join(', ')}</p>
         <p><strong>Description:</strong> ${data.volumeInfo.description}</p>
         <img src="${data.volumeInfo.imageLinks?.thumbnail}" alt="Book Cover">
-      <p> <a href="multiple-books.html">
-    <button>Go to Multiple Books Page</button> </a>
-    </p>
-
+        <p><a href="multiple-books.html">Multiple Books</a></p>
       </div>
     `;
     $('#single-book').html(bookHTML);
