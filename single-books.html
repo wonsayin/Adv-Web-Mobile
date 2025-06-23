@@ -43,12 +43,13 @@
         <p><strong>Author(s):</strong> ${data.volumeInfo.authors?.join(', ')}</p>
         <p><strong>Description:</strong> ${data.volumeInfo.description}</p>
         <img src="${data.volumeInfo.imageLinks?.thumbnail}" alt="Book Cover">
-        <p><a href="multiple-books.html">Multiple Books</a></p>
       </div>
     `;
     $('#single-book').html(bookHTML);
   });
 
+   <p><a href="multiple-books.html">Multiple Books</a></p>
+     
   // Load and display multiple books
   $.getJSON("json/google-books-search.json", function(data) {
     let output = "";
