@@ -1,61 +1,110 @@
-.content {
-  max-width: 200px;
-  margin: auto;
-}
-
+/* Reset and Base Styling */
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, Tahoma, Serif;
-    background-color: #f8f8f8; /* Light gray background */
-    color: #333;
-  }
-
-nav {
-    display: flex; 
-    justify-content: space-between; 
-    padding: 1rem 2rem; 
-    align-items: center; /* Align items vertically */
-    background-color: #333; /* Dark background color */
-    color: #fff; /* White text color */
-  }
-  
-  nav ul {
-    display: flex; 
-    list-style: none; 
-  }
-  
-  nav li {
-    padding-left: 1rem; 
-  }
-
-  nav a {
-    text-decoration: none;
-    color: inherit; /* Inherit color from parent */
-  }
-
-  nav a:hover {
-    color: #e91e63; /* Red color on hover */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.hero {
-  text-align: center;
-  padding: 2rem;
-  background-color: #e91e63;
+body {
+  font-family: Arial, Tahoma, sans-serif;
+  background-color: #f8f8f8;
   color: #333;
+  line-height: 1.6;
 }
 
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+}
 
+/* Navbar Styling */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+}
+
+nav h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav li {
+  margin-left: 1rem;
+}
+
+nav a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #e91e63;
+}
+
+/* Headings */
 h1 {
   text-align: center;
-  color: #333;
   margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
+h2, h3 {
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+/* Media Sections */
+.media-section {
+  margin-top: 3rem;
+}
+
+.media-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+}
+
+.media-item img {
+  max-width: 200px;
+  border-radius: 6px;
+}
+
+.media-details {
+  flex: 1;
+  min-width: 250px;
+}
+
+.media-details h4 {
+  margin-bottom: 0.5rem;
+}
+
+.media-details p {
+  margin-bottom: 0.75rem;
+}
+
+/* Rating Styling */
+.media-details span {
+  display: inline-block;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
 
 /* for milstone 1 book display */
 .book-display, .book-list {
