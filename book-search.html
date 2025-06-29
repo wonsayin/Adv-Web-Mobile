@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Milestone 2: Book Search</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <style>
+    /* Basic clean style */
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; }
+    nav a { margin-right: 20px; text-decoration:none; color: #333; font-weight:bold;}
+    nav a:hover { color: #e91e63; }
+    .book { margin-bottom: 10px; }
+    .book img { vertical-align: middle; max-height: 60px; margin-right: 10px; }
+    .pagination { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="bookshelf.html">My Bookshelf</a>
+</nav>
+
+<h1>Book Search</h1>
+
+<input type="text" id="searchTerm" placeholder="Enter keywords" />
+<button id="searchBtn">Search</button>
+
+<div id="results"></div>
+
+<div class="pagination" id="pagination"></div>
+
+<script>
+  const maxResultsPerPage = 10;
+  let currentPage = 1;
+  let totalItems = 0;
+  let currentQuery = '';
+
+  function fetchBooks(query, startIndex = 0) {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&startIndex=${startIndex}&maxResults=${maxResultsPerPage}`;
+    $.getJSON(url, function(data) {
+      totalItems = data.totalItems || 0;
+      displayResults(data.items || []);
+      displayPagination();
+    });
+  }
+
+  function displayResults(books) {
+    const $results = $('#results');
+    $results.empty();
+
+    if(books.length === 0) {
+      $results.text('No results found.');
+      return;
+    }
+
+    books.forEach(book => {
+      const info = book.volumeInfo;
+      const thumbnail = info.imageLinks ? info.imageLinks.smallThumbnail : '';
+      const title = info.title || 'No title';
+      const id = book.id;
+
+      const bookHTML = `
+        <div class="book">
+          <img src="${thumbnail}" alt="Cover" />
+          <a href="book-details.html?id=${id}">${title}</a>
+        </div>
+      `;
+      $results.append(bookHTML);
+    });
+  }
+
+  function displayPagination() {
+    const $pagination = $('#pagination');
+    $pagination.empty();
+
+    const totalPages = Math.min(Math.ceil(totalItems / maxResultsPerPage), 6); // max 60 results = 6 pages
+    for(let i=1; i <= totalPages; i++) {
+      const pageLink = $('<a href="#" style="margin-right: 10px;">' + i + '</a>');
+      if(i === currentPage) {
+        pageLink.css('font-weight', 'bold');
+      }
+      pageLink.on('click', function(e) {
+        e.preventDefault();
+        currentPage = i;
+        fetchBooks(currentQuery, (currentPage-1)*maxResultsPerPage);
+      });
+      $pagination.append(pageLink);
+    }
+  }
+
+  $('#searchBtn').on('click', function() {
+    currentQuery = $('#searchTerm').val().trim();
+    if(currentQuery) {
+      currentPage = 1;
+      fetchBooks(currentQuery, 0);
+    }
+  });
+
+</script>
+
+</body>
+</html>
