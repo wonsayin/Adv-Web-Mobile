@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Bookshelf</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      margin: 0;
+    }
+
+    /* navbar */
+    nav {
+      background-color: #F7CAC9;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+
+    nav li {
+      margin-left: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #92A8D1;
+    }
+
+    .book {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .book img {
+      max-height: 80px;
+      margin-right: 15px;
+    }
+
+    .book a {
+      font-weight: bold;
+      text-decoration: none;
+      color: #2c3e50;
+    }
+
+    .book a:hover {
+      color: #e91e63;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <h2>Adv Web & Mobile</h2>
+  <ul>
+    <li></li><a href="index.html">Home</a>
+    <li></li><a href="bookshelf.html">My Bookshelf</a>
+  </ul>
+</nav>
+
+<h1>📚 My Public Bookshelf</h1>
+<div id="bookshelf"></div>
+
+<script>
+  const userId = '106549271197529146955'; // <-- replace with your actual user ID
+  const shelfId = '2'; // or '1001' depending on your bookshelf
+  const apiURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+
+  $.getJSON(apiURL, function(data) {
+    if (!data.items || data.items.length === 0) {
+      $('#bookshelf').html('<p>No books found in your public bookshelf.</p>');
+      return;
+    }
+
+    data.items.forEach(book => {
+      const info = book.volumeInfo;
+      const title = info.title || 'No Title';
+      const thumbnail = info.imageLinks ? info.imageLinks.thumbnail : '';
+      const bookId = book.id;
+
+      const bookHTML = `
+        <div class="book">
+          ${thumbnail ? `<img src="${thumbnail}" alt="${title}">` : ''}
+          <div>
+            <a href="book-details.html?id=${bookId}">${title}</a>
+          </div>
+        </div>
+      `;
+
+      $('#bookshelf').append(bookHTML);
+    });
+  }).fail(function() {
+    $('#bookshelf').html('<p>Error loading bookshelf. Make sure it is public and the IDs are correct.</p>');
+  });
+</script>
+
+</body>
+</html>
