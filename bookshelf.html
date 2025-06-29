@@ -84,7 +84,7 @@
 <script>
   const userId = '106549271197529146955'; // <-- replace with your actual user ID
   const shelfId = '2'; // or '1001' depending on your bookshelf
-  const apiURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+  const apiURL = `https://www.googleapis.com/books/v1/users/${106549271197529146955}/bookshelves/${2}/volumes`;
 
   $.getJSON(apiURL, function(data) {
     if (!data.items || data.items.length === 0) {
