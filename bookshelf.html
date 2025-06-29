@@ -72,10 +72,11 @@
 
 <nav>
   <h2>Adv Web & Mobile</h2>
-  <ul>
-    <li></li><a href="index.html">Home</a>
-    <li></li><a href="bookshelf.html">My Bookshelf</a>
-  </ul>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="bookshelf.html">My Bookshelf</a></li>
+</ul>
+
 </nav>
 
 <h1>📚 My Public Bookshelf</h1>
@@ -84,7 +85,7 @@
 <script>
   const userId = '106549271197529146955'; // <-- replace with your actual user ID
   const shelfId = '2'; // or '1001' depending on your bookshelf
-  const apiURL = `https://www.googleapis.com/books/v1/users/${106549271197529146955}/bookshelves/${2}/volumes`;
+  const apiURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
 
   $.getJSON(apiURL, function(data) {
     if (!data.items || data.items.length === 0) {
