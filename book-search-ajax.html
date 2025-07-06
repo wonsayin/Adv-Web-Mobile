@@ -108,44 +108,45 @@
 
 <h1>📚 Book Explorer</h1>
 
-<!-- Search Section -->
+<!-- search -->
 <div class="search-bar">
   <input type="text" id="searchInput" placeholder="Search for books..." />
   <button id="searchBtn">Search</button>
 </div>
 
-<!-- Pagination -->
+<!-- pagination -->
 <div class="pagination" id="pagination"></div>
 
-<!-- Search Results -->
+<!-- results -->
 <h2>🔎 Search Results</h2>
 <div class="books" id="searchResults"></div>
 
-<!-- Faux Bookshelf -->
+<!-- details of books -->
+<h2>📘 Book Details</h2>
+<div class="details" id="bookDetails">Click a book to learn more!</div>
+
+<!-- bookshelf -->
 <h2>📖 My Bookshelf</h2>
 <div class="bookshelf" id="bookshelf">
-  <!-- Coraline -->
+  <!-- coraline -->
   <div class="book" data-id="3tvInwtsoCcC">
     <img src="https://books.google.com/books/content?id=3tvInwtsoCcC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71nFu8C9SYw4zwvh-0xAIs-q5mZl5xIH3-8mZxzelEUJAJrGwYI24I9fdn4tIH2zaehhQffpmej38BFaXgpjddPatbdPp8_FLzBBg0DC0bBUXfI04wgLn9ur9ftoiXtFuHTppWl" alt="Coraline" />
     <div>Coraline</div>
   </div>
-  <!-- Winter by Marissa Meyer -->
+  
+  <!-- winter -->
   <div class="book" data-id="QpfBwAAQBAJ">
     <img src="https://books.google.com/books/publisher/content?id=_QpfBwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE71Z3JpkLsoadYYva1JBRTjLZ5A8dQjkR8WVR2_RnOeKZ_2HXD48vc1zSwj8UtBKUpZrQeyv6ZnALsEM-GkFMESv830tSyYbrylzLU4wlkDu02HEV1X8NYfLvDQ-o-jy0-K0iDgf" alt="Winter" />
     <div>Winter</div>
   </div>
-  <!-- Miss Peregrine's Home -->
+  <!-- peregrine's home -->
   <div class="book" data-id="nPVnBgAAQBAJ">
     <img src="https://books.google.com/books/publisher/content?id=nPVnBgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE72XQYQL9tUPFRN_j3iWrIa9HB2oxvbYEyWkegNy54I5TnU11s4vHDNDY-ED_y_LREKNAiGqQ5g7hBaSyvHO5sBQSbacx1oH7IFx-nlggXJrdmnpnY1PhBxDW-kjZDRYwcCRthQN" alt="Miss Peregrine's" />
     <div>Miss Peregrine's Home for Peculiar Children</div>
   </div>
 </div>
 
-<!-- Book Details Section -->
-<h2>📘 Book Details</h2>
-<div class="details" id="bookDetails">Click a book to learn more!</div>
-
-<!-- jQuery Script -->
+<!-- jQuery -->
 <script>
   const RESULTS_PER_PAGE = 10;
   let searchResults = [];
@@ -221,13 +222,13 @@
     });
   });
 
-  // Handle pagination click
+  // pagination click
   $(document).on('click', '.page-btn', function () {
     const page = parseInt($(this).data('page'));
     renderSearchResults(page);
   });
 
-  // Handle click for book (from search or bookshelf)
+  // click for book (from search or bookshelf)
   $(document).on('click', '.book', function () {
     const bookId = $(this).data('id');
     loadBookDetails(bookId);
