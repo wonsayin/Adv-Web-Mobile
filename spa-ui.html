@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Explorer - Milestone 4</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #F7CAC9;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+
+    nav li {
+      margin-left: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #92A8D1;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+      margin-left: 1rem;
+    }
+
+    .container {
+      display: flex;
+      padding: 1rem;
+      gap: 2rem;
+    }
+
+    .left-panel {
+      flex: 1;
+    }
+
+    .right-panel {
+      flex: 1;
+    }
+
+    .search-bar {
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 250px;
+    }
+
+    button {
+      background-color: #92A8D1;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    button:hover {
+      background-color: #7a8eb8;
+    }
+
+    .view-toggle {
+      margin: 1rem 0;
+    }
+
+    .books.grid .book-item {
+      width: 150px;
+    }
+
+    .books.list .book-item {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .book-item {
+      background: white;
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .book-item img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .pagination {
+      margin: 1rem 0;
+    }
+
+    .details {
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ccc;
+    }
+
+    .tab-buttons {
+      margin-bottom: 10px;
+    }
+
+    .tab-buttons button.active {
+      background-color: #e91e63;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <h2>Adv Web & Mobile</h2>
+    <ul>
+      <li><a href="#">Home</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main UI -->
+  <div class="container">
+    <div class="left-panel">
+      <!-- Search -->
+      <h1>📚 Book Explorer</h1>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for books..." />
+        <button id="searchBtn">Search</button>
+      </div>
+
+      <!-- View Toggle -->
+      <div class="view-toggle">
+        <button id="gridView" class="active">Grid View</button>
+        <button id="listView">List View</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-buttons">
+        <button id="tab-search" class="active">Search Results</button>
+        <button id="tab-shelf">My Bookshelf</button>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+
+      <!-- Results & Shelf Containers -->
+      <div id="searchResults" class="books grid"></div>
+      <div id="bookshelf" class="books grid" style="display:none;"></div>
+    </div>
+
+    <!-- Book Details -->
+    <div class="right-panel">
+      <h2>📘 Book Details</h2>
+      <div id="bookDetails" class="details">Click a book to learn more!</div>
+    </div>
+  </div>
+
+  <!-- Mustache Templates -->
+  <script id="book-template" type="x-tmpl-mustache">
+    <div class="book-item" data-id="{{id}}">
+      {{#thumbnail}}<img src="{{thumbnail}}" alt="{{title}}">{{/thumbnail}}
+      <div>{{title}}</div>
+    </div>
+  </script>
+
+  <script id="details-template" type="x-tmpl-mustache">
+    <h3>{{title}}</h3>
+    <p><strong>Authors:</strong> {{authors}}</p>
+    <p><strong>Publisher:</strong> {{publisher}}</p>
+    <p><strong>Published Date:</strong> {{publishedDate}}</p>
+    <p><strong>Description:</strong> {{description}}</p>
+    {{#thumbnail}}<img src="{{thumbnail}}" alt="{{title}}">{{/thumbnail}}
+  </script>
+
+  <!-- Script -->
+  <script>
+    const RESULTS_PER_PAGE = 10;
+    let searchResults = [];
+    let viewMode = 'grid';
+
+    function renderPagination(totalItems) {
+      $('#pagination').empty();
+      const pages = Math.ceil(totalItems / RESULTS_PER_PAGE);
+      for (let i = 1; i <= Math.min(pages, 5); i++) {
+        $('#pagination').append(`<button class="page-btn" data-page="${i}">${i}</button>`);
+      }
+    }
+
+    function renderBooks(containerId, books, page = 1) {
+      const start = (page - 1) * RESULTS_PER_PAGE;
+      const end = start + RESULTS_PER_PAGE;
+      const currentPageBooks = books.slice(start, end);
+      const template = $('#book-template').html();
+      const rendered = currentPageBooks.map(book => {
+        const info = book.volumeInfo || book;
+        return Mustache.render(template, {
+          id: book.id,
+          title: info.title || 'No Title',
+          thumbnail: info.imageLinks?.thumbnail || ''
+        });
+      }).join('');
+      $(`#${containerId}`).html(rendered).removeClass('grid list').addClass(viewMode);
+    }
+
+    function loadBookDetails(bookId) {
+      const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+      $.getJSON(url, function (data) {
+        const info = data.volumeInfo;
+        const detailsHTML = Mustache.render($('#details-template').html(), {
+          title: info.title || 'No Title',
+          authors: info.authors?.join(', ') || 'Unknown',
+          publisher: info.publisher || 'Unknown',
+          publishedDate: info.publishedDate || 'Unknown',
+          description: info.description || 'No description.',
+          thumbnail: info.imageLinks?.thumbnail || ''
+        });
+        $('#bookDetails').html(detailsHTML);
+      }).fail(() => {
+        $('#bookDetails').html('<p>Error loading book details.</p>');
+      });
+    }
+
+    $('#searchBtn').on('click', function () {
+      const query = $('#searchInput').val().trim();
+      if (!query) return;
+      $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=40`, function (data) {
+        searchResults = data.items || [];
+        renderPagination(searchResults.length);
+        renderBooks('searchResults', searchResults, 1);
+      });
+    });
+
+    $(document).on('click', '.page-btn', function () {
+      const page = parseInt($(this).data('page'));
+      renderBooks('searchResults', searchResults, page);
+    });
+
+    $(document).on('click', '.book-item', function () {
+      const bookId = $(this).data('id');
+      loadBookDetails(bookId);
+    });
+
+    $('#gridView').on('click', function () {
+      viewMode = 'grid';
+      $('#searchResults, #bookshelf').removeClass('list').addClass('grid');
+    });
+
+    $('#listView').on('click', function () {
+      viewMode = 'list';
+      $('#searchResults, #bookshelf').removeClass('grid').addClass('list');
+    });
+
+    $('#tab-search').on('click', function () {
+      $('#searchResults').show();
+      $('#bookshelf').hide();
+      $(this).addClass('active');
+      $('#tab-shelf').removeClass('active');
+    });
+
+    $('#tab-shelf').on('click', function () {
+      $('#searchResults').hide();
+      $('#bookshelf').show();
+      $(this).addClass('active');
+      $('#tab-search').removeClass('active');
+    });
+
+    // Fake bookshelf data
+    const fakeBookshelf = [
+      {
+        id: '3tvInwtsoCcC',
+        volumeInfo: {
+          title: 'Coraline',
+          imageLinks: { thumbnail: 'https://books.google.com/books/content?id=3tvInwtsoCcC&printsec=frontcover&img=1&zoom=1' }
+        }
+      },
+      {
+        id: '_QpfBwAAQBAJ',
+        volumeInfo: {
+          title: 'Winter',
+          imageLinks: { thumbnail: 'https://books.google.com/books/content?id=_QpfBwAAQBAJ&printsec=frontcover&img=1&zoom=1' }
+        }
+      },
+      {
+        id: 'nPVnBgAAQBAJ',
+        volumeInfo: {
+          title: "Miss Peregrine's Home for Peculiar Children",
+          imageLinks: { thumbnail: 'https://books.google.com/books/content?id=nPVnBgAAQBAJ&printsec=frontcover&img=1&zoom=1' }
+        }
+      }
+    ];
+
+    // Render bookshelf on load
+    $(document).ready(function () {
+      renderBooks('bookshelf', fakeBookshelf);
+    });
+  </script>
+
+</body>
+</html>
