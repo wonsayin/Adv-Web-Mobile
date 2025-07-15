@@ -71,6 +71,7 @@
       width: 250px;
     }
 
+    /*button*/
     button {
       background-color: #92A8D1;
       color: white;
@@ -104,7 +105,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-}
+    }  
 
     .book-item {
       background: white;
@@ -141,7 +142,7 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  <!-- navbar -->
   <nav>
     <h2>Adv Web & Mobile</h2>
     <ul>
@@ -149,7 +150,7 @@
     </ul>
   </nav>
 
-  <!-- Main UI -->
+  <!-- main ccontent -->
   <div class="container">
     <div class="left-panel">
       <!-- Search -->
@@ -159,34 +160,34 @@
         <button id="searchBtn">Search</button>
       </div>
 
-      <!-- View Toggle -->
+      <!-- view buttons -->
       <div class="view-toggle">
         <button id="gridView" class="active">Grid View</button>
         <button id="listView">List View</button>
       </div>
 
-      <!-- Tabs -->
+      <!-- tabs -->
       <div class="tab-buttons">
         <button id="tab-search" class="active">Search Results</button>
         <button id="tab-shelf">My Bookshelf</button>
       </div>
 
-      <!-- Pagination -->
+      <!-- pagination -->
       <div class="pagination" id="pagination"></div>
 
-      <!-- Results & Shelf Containers -->
+      <!-- results -->
       <div id="searchResults" class="books grid"></div>
       <div id="bookshelf" class="books grid" style="display:none;"></div>
     </div>
 
-    <!-- Book Details -->
+    <!-- details -->
     <div class="right-panel">
       <h2>📘 Book Details</h2>
       <div id="bookDetails" class="details">Click a book to learn more!</div>
     </div>
   </div>
 
-  <!-- Mustache Templates -->
+  <!-- templates -->
   <script id="book-template" type="x-tmpl-mustache">
     <div class="book-item" data-id="{{id}}">
       {{#thumbnail}}<img src="{{thumbnail}}" alt="{{title}}">{{/thumbnail}}
@@ -203,7 +204,7 @@
     {{#thumbnail}}<img src="{{thumbnail}}" alt="{{title}}">{{/thumbnail}}
   </script>
 
-  <!-- Script -->
+  <!-- script -->
   <script>
     const RESULTS_PER_PAGE = 10;
     let searchResults = [];
@@ -320,7 +321,7 @@
       }
     ];
 
-    // Render bookshelf on load
+    // render bookshelf on load
     $(document).ready(function () {
       renderBooks('bookshelf', fakeBookshelf);
     });
