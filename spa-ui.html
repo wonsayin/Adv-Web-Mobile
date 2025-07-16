@@ -235,22 +235,27 @@
     }
 
     function loadBookDetails(bookId) {
-      const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
-      $.getJSON(url, function (data) {
-        const info = data.volumeInfo;
-        const detailsHTML = Mustache.render($('#details-template').html(), {
-          title: info.title || 'No Title',
-          authors: info.authors?.join(', ') || 'Unknown',
-          publisher: info.publisher || 'Unknown',
-          publishedDate: info.publishedDate || 'Unknown',
-          description: info.description || 'No description.',
-          thumbnail: info.imageLinks?.thumbnail || ''
-        });
-        $('#bookDetails').html(detailsHTML);
-      }).fail(() => {
-        $('#bookDetails').html('<p>Error loading book details.</p>');
-      });
+  const apiURL = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+  $.ajax({
+    url: apiURL,
+    method: 'GET',
+    success: function (data) {
+      const info = data.volumeInfo;
+      $('#bookDetails').html(`
+        <h3>${info.title}</h3>
+        <p><strong>Authors:</strong> ${info.authors?.join(', ') || 'Unknown'}</p>
+        <p><strong>Publisher:</strong> ${info.publisher || 'Unknown'}</p>
+        <p><strong>Published Date:</strong> ${info.publishedDate || 'Unknown'}</p>
+        <p><strong>Description:</strong></p>
+        ${info.description || '<p>No description available.</p>'}
+        ${info.imageLinks?.thumbnail ? `<img src="${info.imageLinks.thumbnail}" alt="${info.title}">` : ''}
+      `);
+    },
+    error: function () {
+      $('#bookDetails').html('<p>Error loading book details.</p>');
     }
+  });
+}
 
     $('#searchBtn').on('click', function () {
       const query = $('#searchInput').val().trim();
