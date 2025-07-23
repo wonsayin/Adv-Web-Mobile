@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TMDb SPA - Movie Explorer</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.2.0/mustache.min.js"></script>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      margin: 0;
+    }
+
+    /* navbar */
+    nav {
+      background-color: #F7CAC9;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+
+    nav li {
+      margin-left: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #92A8D1;
+    }
+
+    
+    h1, h2 {
+      color: #white;
+    }
+    
+    .container {
+      display: flex;
+      padding: 1rem;
+    }
+    
+    .sidebar {
+      width: 30%;
+      padding: 1rem;
+    }
+    
+    .results {
+      width: 70%;
+      padding: 1rem;
+    }
+    
+    .movie {
+      border: 1px solid #ccc;
+      background: white;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .movie img {
+      width: 100px;
+      height: auto;
+      margin-right: 1rem;
+    }
+    
+    .grid .movie {
+      width: 45%;
+      display: inline-block;
+      vertical-align: top;
+      margin: 0.5rem;
+    }
+    
+    .controls {
+      margin-bottom: 1rem;
+    }
+    
+    .tabs {
+      margin-top: 1rem;
+    }
+    
+    .tab {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #bdc3c7;
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .tab.active {
+      background: #3498db;
+      color: white;
+    }
+    
+    #details {
+      background: white;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h1>Movie Explorer</h1>
+    <div>
+      <input type="text" id="searchInput" placeholder="Search movies..." />
+      <button id="searchBtn">Search</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="sidebar">
+      <div class="controls">
+        <button id="listView">List View</button>
+        <button id="gridView">Grid View</button>
+        <button id="popularBtn">Popular</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active" data-tab="movies">Movies</div>
+        <div class="tab" data-tab="details">Details</div>
+      </div>
+      <div id="movieList" class="movies list"></div>
+    </div>
+
+    <div class="results">
+      <div id="details"></div>
+    </div>
+  </div>
+
+  <!-- Movie Template -->
+  <script id="movie-template" type="x-tmpl-mustache">
+    <div class="movie" data-id="{{id}}">
+      <img src="https://image.tmdb.org/t/p/w200{{poster_path}}" alt="{{title}}" />
+      <div>
+        <h3>{{title}}</h3>
+        <p>Rating: {{vote_average}}</p>
+        <p>{{release_date}}</p>
+      </div>
+    </div>
+  </script>
+
+  <!-- Detail Template -->
+  <script id="details-template" type="x-tmpl-mustache">
+    <h2>{{title}}</h2>
+    <img src="https://image.tmdb.org/t/p/w300{{poster_path}}" alt="{{title}}" />
+    <p><strong>Release Date:</strong> {{release_date}}</p>
+    <p><strong>Genres:</strong> {{#genres}}{{name}}{{^last}}, {{/last}}{{/genres}}</p>
+    <p>{{overview}}</p>
+    <h3>Cast</h3>
+    <ul>
+      {{#cast}}
+        <li>{{name}} as {{character}}</li>
+      {{/cast}}
+    </ul>
+  </script>
+
+  <script>
+    const apiKey = "ec7726cc9db266cd7a8add27374b7d8c";
+    let currentView = 'list';
+
+    function renderMovies(movies) {
+      const template = $('#movie-template').html();
+      const rendered = movies.map(m => Mustache.render(template, m)).join('');
+      $('#movieList').html(rendered).removeClass('grid list').addClass(currentView);
+    }
+
+    function searchMovies(query) {
+      $.getJSON(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}`, data => {
+        renderMovies(data.results.slice(0, 20));
+      });
+    }
+
+    function loadPopular() {
+      $.getJSON(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`, data => {
+        renderMovies(data.results.slice(0, 20));
+      });
+    }
+
+    function loadDetails(id) {
+      $.getJSON(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`, movie => {
+        $.getJSON(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`, credits => {
+          movie.cast = credits.cast.slice(0, 5);
+          movie.genres.forEach((g, i) => g.last = (i === movie.genres.length - 1));
+          const template = $('#details-template').html();
+          const rendered = Mustache.render(template, movie);
+          $('#details').html(rendered);
+          $('.tab').removeClass('active');
+          $('.tab[data-tab="details"]').addClass('active');
+        });
+      });
+    }
+
+    $(document).ready(function () {
+      $('#searchBtn').click(() => {
+        const query = $('#searchInput').val();
+        if (query) searchMovies(query);
+      });
+
+      $('#popularBtn').click(loadPopular);
+
+      $('#gridView').click(() => {
+        currentView = 'grid';
+        $('#movieList').removeClass('list').addClass('grid');
+      });
+
+      $('#listView').click(() => {
+        currentView = 'list';
+        $('#movieList').removeClass('grid').addClass('list');
+      });
+
+      $('#movieList').on('click', '.movie', function () {
+        const id = $(this).data('id');
+        loadDetails(id);
+      });
+
+      $('.tab').click(function () {
+        $('.tab').removeClass('active');
+        $(this).addClass('active');
+        const tab = $(this).data('tab');
+        if (tab === 'movies') {
+          $('#details').hide();
+          $('#movieList').show();
+        } else {
+          $('#movieList').show();
+          $('#details').show();
+        }
+      });
+
+      // Load popular by default
+      loadPopular();
+    });
+  </script>
+
+</body>
+</html>
